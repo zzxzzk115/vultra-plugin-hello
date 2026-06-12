@@ -4,9 +4,10 @@
   "name": "Hello",
   "version": "0.1.0",
   "author": "Vultra",
-  "description": "A pure-Lua example plugin that exposes a greeting helper into the shared Lua state.",
+  "description": "A minimal native C++ + Lua plugin that exposes helloFromCpp() and helloFromLua() helpers.",
   "readme": "README.md",
   "repository": "https://github.com/zzxzzk115/vultra-plugin-hello",
   "platforms": ["windows", "linux", "macos"],
+  "native": "vultra_plugin_hello",
   "entry": "init.lua"
 }

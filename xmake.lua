@@ -1,0 +1,8 @@
+target("plugin-hello")
+    set_kind("shared")
+    set_basename("vultra_plugin_hello")
+    set_prefixname("")
+    add_deps("vultra")
+    add_files("hello_plugin.cpp")
+    set_targetdir(os.scriptdir())
+target_end()

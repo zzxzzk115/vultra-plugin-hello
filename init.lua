@@ -1,23 +1,29 @@
--- "hello" example plugin (pure Lua).
+-- "hello" example plugin (native C++ + Lua).
 --
 -- The PluginSystem runs this file and, on the returned table, calls on_install() at load and
--- on_uninstall() at shutdown. Plugins share the engine's Lua state, so they can register globals
--- that ordinary entity scripts then call, act as a glue layer over a native plugin's bindings,
--- or extend the editor.
+-- on_uninstall() at shutdown. The native side registers helloFromCpp() into the shared Lua state;
+-- this Lua entry calls it and also registers a pure-Lua helper for scripts to call.
 local M = {}
 
 function M.on_install()
     print("[hello-plugin] installed")
 
-    -- Expose a helper into the shared Lua state for entity scripts to use.
-    function hello_from_plugin(who)
-        return "Hello, " .. tostring(who or "world") .. ", from the hello plugin!"
+    function helloFromLua(who)
+        return "Hello, " .. tostring(who or "world") .. ", from Lua!"
     end
+
+    if type(helloFromCpp) == "function" then
+        print("[hello-plugin] " .. tostring(helloFromCpp("Vultra")))
+    else
+        print("[hello-plugin] native helloFromCpp() binding is unavailable")
+    end
+
+    print("[hello-plugin] " .. tostring(helloFromLua("Vultra")))
 end
 
 function M.on_uninstall()
     print("[hello-plugin] uninstalled")
-    hello_from_plugin = nil
+    helloFromLua = nil
 end
 
 return M
