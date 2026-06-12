@@ -4,6 +4,12 @@
 
 #include <lua.hpp>
 
+#if defined(_WIN32)
+#define PLUGIN_EXPORT extern "C" __declspec(dllexport)
+#else
+#define PLUGIN_EXPORT extern "C" __attribute__((visibility("default")))
+#endif
+
 namespace
 {
     int helloFromCpp(lua_State* L)
@@ -43,12 +49,12 @@ namespace
     };
 } // namespace
 
-VULTRA_PLUGIN_API vultra::EnginePlugin* vultraCreatePlugin()
+PLUGIN_EXPORT vultra::EnginePlugin* vultraCreatePlugin()
 {
     return new HelloPlugin();
 }
 
-VULTRA_PLUGIN_API void vultraDestroyPlugin(vultra::EnginePlugin* plugin)
+PLUGIN_EXPORT void vultraDestroyPlugin(vultra::EnginePlugin* plugin)
 {
     delete plugin;
 }
